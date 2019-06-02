@@ -9,7 +9,7 @@ namespace Products.Models
 {
     public class ProductsContext : DbContext
     {
-        public DbSet<Products> Products_ { get; set; }
+        public DbSet<Product> Products_ { get; set; }
         public DbSet<Currency> Currency_ { get; set; }
         public DbSet<Producer> Producer_ { get; set; }
 
@@ -19,7 +19,7 @@ namespace Products.Models
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
+        {            
             modelBuilder.Entity<Producer>().HasData(
             new Producer[]
             {
@@ -37,12 +37,12 @@ namespace Products.Models
             });
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Products>().HasData(
-            new Products[]
+            modelBuilder.Entity<Product>().HasData(
+            new Product[]
             {
-                new Products { Id=1, Name="A1", Description="fast&furios", PrId=3,Price=100,CurId=2,Available=true},
-                new Products { Id=2, Name="B1", Description="soft", PrId=2,Price=150,CurId=2,Available=false},
-                new Products { Id=3, Name="C1", Description="-", PrId=1,Price=6000,CurId=1,Available=true}
+                new Product { Id=1, Name="A1", Description="fast&furios", PrId=3,Price=100,CurId=2,Available=true},
+                new Product { Id=2, Name="B1", Description="soft", PrId=2,Price=150,CurId=2,Available=false},
+                new Product { Id=3, Name="C1", Description="-", PrId=1,Price=6000,CurId=1,Available=true}
             });
             base.OnModelCreating(modelBuilder);
         }

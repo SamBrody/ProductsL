@@ -10,5 +10,7 @@ namespace Products.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string CityL { get; set; }
+
+        public virtual ICollection<Product> Product { get; set; }
     }
 }

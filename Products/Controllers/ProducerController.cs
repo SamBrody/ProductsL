@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Data.Entity;
+//using System.Data.Entity;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Products.Models;
 using System.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Products.Controllers
 {
@@ -37,7 +38,7 @@ namespace Products.Controllers
         {
             if (id == producer.Id)
             {
-              //  db.Entry(producer).State = EntityState.Modified;
+               db.Entry(producer).State = EntityState.Modified;
 
                 db.SaveChanges();
             }
