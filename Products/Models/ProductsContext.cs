@@ -1,17 +1,19 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
+using Products.Models;
 
 
 namespace Products.Models
 {
     public class ProductsContext : DbContext
     {
-        public DbSet<Product> Products_ { get; set; }
-        public DbSet<Currency> Currency_ { get; set; }
-        public DbSet<Producer> Producer_ { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Currency> Currencies { get; set; }
+        public DbSet<Producer> Producers { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -19,7 +21,15 @@ namespace Products.Models
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {            
+        {
+            modelBuilder.Entity<Product>()
+                .HasOne(p => p.Producer)
+                .WithMany(b => b.Product);
+
+            modelBuilder.Entity<Product>()
+                .HasOne(p => p.Currency)
+                .WithMany(b => b.Product);
+
             modelBuilder.Entity<Producer>().HasData(
             new Producer[]
             {
@@ -40,9 +50,9 @@ namespace Products.Models
             modelBuilder.Entity<Product>().HasData(
             new Product[]
             {
-                new Product { Id=1, Name="A1", Description="fast&furios", PrId=3,Price=100,CurId=2,Available=true},
-                new Product { Id=2, Name="B1", Description="soft", PrId=2,Price=150,CurId=2,Available=false},
-                new Product { Id=3, Name="C1", Description="-", PrId=1,Price=6000,CurId=1,Available=true}
+                new Product { Id=1, Name="A1", Description="fast&furios", Price=100,Available=true},
+                new Product { Id=2, Name="B1", Description="soft", Price=150,Available=false},
+                new Product { Id=3, Name="C1", Description="-", Price=6000,Available=true}
             });
             base.OnModelCreating(modelBuilder);
         }

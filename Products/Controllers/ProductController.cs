@@ -15,19 +15,19 @@ namespace Products.Controllers
         // GET: api/Products
         public IEnumerable<Product> Get()
         {
-            return db.Products_;
+            return db.Products;
         }
 
         // GET: api/Products/5
         public Product Get(int id)
         {
-            return (db.Products_.Find(id));
+            return (db.Products.Find(id));
         }
 
         // POST: api/Products
         public void Post([FromBody]Product product)
         {
-            db.Products_.Add(product);
+            db.Products.Add(product);
             db.SaveChanges();
         }
 
@@ -45,10 +45,10 @@ namespace Products.Controllers
         // DELETE: api/Products/5
         public void Delete(int id)
         {
-            Product product = db.Products_.Find(id);
+            Product product = db.Products.Find(id);
             if (product != null)
             {
-                db.Products_.Remove(product);
+                db.Products.Remove(product);
                 db.SaveChanges();
             }
         }

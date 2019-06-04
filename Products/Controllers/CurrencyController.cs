@@ -15,19 +15,19 @@ namespace Products.Controllers
         // GET: api/Currency
         public IEnumerable<Currency> Get()
         {
-            return db.Currency_;
+            return db.Currencies;
         }
 
         // GET: api/Currency/5
         public Currency Get(int id)
         {
-            return (db.Currency_.Find(id));
+            return (db.Currencies.Find(id));
         }
 
         // POST: api/Currency
         public void Post([FromBody]Currency currency)
         {
-            db.Currency_.Add(currency);
+            db.Currencies.Add(currency);
             db.SaveChanges();
         }
 
@@ -45,10 +45,10 @@ namespace Products.Controllers
         // DELETE: api/Currency/5
         public void Delete(int id)
         {
-            Currency currency = db.Currency_.Find(id);
+            Currency currency = db.Currencies.Find(id);
             if (currency != null)
             {
-                db.Currency_.Remove(currency);
+                db.Currencies.Remove(currency);
                 db.SaveChanges();
             }
         }
