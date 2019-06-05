@@ -17,18 +17,16 @@ namespace Products.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite("Filename=Products.db");
+            optionsBuilder.UseSqlite("Filename=Products.db", x => x.SuppressForeignKeyEnforcement());//поменять
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Product>()
-                .HasOne(p => p.Producer)
-                .WithMany(b => b.Product);
+            modelBuilder.Entity<Producer>().HasMany(p => p.Product).WithOne(b => b.Producer).OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Currency>().HasMany(p => p.Product).WithOne(b => b.Currency).OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<Product>()
-                .HasOne(p => p.Currency)
-                .WithMany(b => b.Product);
+            modelBuilder.Entity<Product>().HasOne(p => p.Producer).WithMany(b => b.Product).HasForeignKey(p => p.ProdId).OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Product>().HasOne(p => p.Currency).WithMany(b => b.Product).HasForeignKey(p => p.CurrId).OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Producer>().HasData(
             new Producer[]
