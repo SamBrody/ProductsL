@@ -20,9 +20,14 @@ namespace Products.Controllers
         }
 
         // GET: api/Producer/5
-        public Producer Get(int id)
+        public IHttpActionResult Get(int id)
         {
-            return (db.Producers.Find(id));
+            Producer producer = db.Producers.Find(id);
+            if (producer == null)
+            {
+                return NotFound();
+            }
+            return Ok(producer);
         }
 
         // POST: api/Producer
@@ -33,25 +38,28 @@ namespace Products.Controllers
         }
 
         // PUT: api/Producer/5
-        public void Put(int id, [FromBody]Producer producer)
+        public HttpResponseMessage Put(int id, [FromBody]Producer producer)
         {
             if (id == producer.Id)
             {
-               db.Entry(producer).State = EntityState.Modified;
-
-                db.SaveChanges();
+               db.Entry(producer).State = EntityState.Modified;            
+               db.SaveChanges();
+               return new HttpResponseMessage(HttpStatusCode.OK);
             }
+            return new HttpResponseMessage(HttpStatusCode.NotFound);
         }
 
         // DELETE: api/Producer/5
-        public void Delete(int id)
+        public HttpResponseMessage Delete(int id)
         {
             Producer producer = db.Producers.Find(id);
             if (producer != null)
             {
                 db.Producers.Remove(producer);
                 db.SaveChanges();
+                return new HttpResponseMessage(HttpStatusCode.OK);
             }
+            return new HttpResponseMessage(HttpStatusCode.NotFound);
         }
     }
 }
