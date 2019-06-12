@@ -567,12 +567,12 @@
     </Compile>
     <Compile Include="Migrations\ProductsContextModelSnapshot.cs" />
     <Compile Include="Models\Currency.cs" />
-    <Compile Include="Models\CurrencyVM.cs" />
+    <Compile Include="Models\RM\CurrencyRM.cs" />
     <Compile Include="Models\Producer.cs" />
-    <Compile Include="Models\ProducerVM.cs" />
+    <Compile Include="Models\RM\ProducerRM.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\ProductsContext.cs" />
-    <Compile Include="Models\ProductVM.cs" />
+    <Compile Include="Models\RM\ProductRM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -706,7 +706,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>56418</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:56418/</IISUrl>
+          <IISUrl>http://localhost:56419/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

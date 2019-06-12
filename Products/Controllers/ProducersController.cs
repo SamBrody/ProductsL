@@ -7,59 +7,74 @@ using System.Web.Http;
 using Products.Models;
 using System.Data;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
 
 namespace Products.Controllers
 {
     public class ProducersController : ApiController
     {
         ProductsContext db = new ProductsContext();
-        // GET: api/Producer
-        public IEnumerable<Producer> Get()
+
+        // GET: api/Producers
+        public IHttpActionResult Get()
         {
-            return db.Producers;
+            return Ok(Mapper.Map<ICollection<ProducerRM>>(db.Producers));
         }
 
-        // GET: api/Producer/5
+        // GET: api/Producers/5
         public IHttpActionResult Get(int id)
         {
-            Producer producer = db.Producers.Find(id);
+            var producer = db.Producers.Find(id);
+
             if (producer == null)
             {
                 return NotFound();
             }
-            return Ok(producer);
+            else
+            {
+                var producerVM = Mapper.Map<ProducerRM>(producer);
+                return Ok(producerVM);
+            }
         }
 
-        // POST: api/Producer
-        public void Post([FromBody]Producer producer)
+        // POST: api/Producers
+        public IHttpActionResult Post([FromBody]Producer producer)
         {
-            db.Producers.Add(producer);
-            db.SaveChanges();
+            if (producer == null)
+                return BadRequest();
+            else
+            {                
+                db.Producers.Add(producer);
+                if (producer.Id <= 0) return BadRequest("Введеный Id меньше или равен 0!");
+                db.SaveChanges();
+                return Ok(Mapper.Map<ProducerRM>(producer));
+            }
         }
 
-        // PUT: api/Producer/5
-        public HttpResponseMessage Put(int id, [FromBody]Producer producer)
+        // PUT: api/Producers/5
+        public IHttpActionResult Put(int id, [FromBody]Producer producer)
         {
             if (id == producer.Id)
-            {
-               db.Entry(producer).State = EntityState.Modified;            
-               db.SaveChanges();
-               return new HttpResponseMessage(HttpStatusCode.OK);
+            {                
+                db.Entry(producer).State = EntityState.Modified;
+                if (producer.Id <= 0) return BadRequest("Введеный Id меньше или равен 0!");
+                db.SaveChanges();
+                return Ok(Mapper.Map<ProducerRM>(producer));
             }
-            return new HttpResponseMessage(HttpStatusCode.NotFound);
+            return NotFound();
         }
 
-        // DELETE: api/Producer/5
-        public HttpResponseMessage Delete(int id)
+        // DELETE: api/Producers/5
+        public IHttpActionResult Delete(int id)
         {
             Producer producer = db.Producers.Find(id);
             if (producer != null)
             {
                 db.Producers.Remove(producer);
                 db.SaveChanges();
-                return new HttpResponseMessage(HttpStatusCode.OK);
+                return Ok(Mapper.Map<ProducerRM>(producer));
             }
-            return new HttpResponseMessage(HttpStatusCode.NotFound);
+            return NotFound();
         }
     }
 }

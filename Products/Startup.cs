@@ -13,15 +13,15 @@ namespace Products
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            var mappingConfig = new MapperConfiguration(mc =>
-            {
-                mc.AddProfile(new MappingProfile());
-            });
+            //var mappingConfig = new MapperConfiguration(mc =>
+            //{
+            //    mc.AddProfile(new MappingProfile());
+            //});
 
-            IMapper mapper = mappingConfig.CreateMapper();
-            services.AddSingleton(mapper);
+            //IMapper mapper = mappingConfig.CreateMapper();
+            //services.AddSingleton(mapper);
 
-            services.AddMvc();
+            //services.AddMvc();
         }
 
         public void Configuration(IAppBuilder app)

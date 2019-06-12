@@ -14,66 +14,68 @@ namespace Products.Controllers
 {
     public class ProductsController : ApiController
     {
-        ProductsContext db = new ProductsContext();
-        private readonly IMapper _mapper;
-
-        public ProductsController(IMapper mapper)
-        {
-            _mapper = mapper;
-        }
+        ProductsContext db = new ProductsContext();  
 
         // GET: api/Products
         public IHttpActionResult Get()
         {
-            return Ok(_mapper.Map<ProductVM>(db.Products));
-            //return db.Products.Include(prod=>prod.Producer).Include(cur => cur.Currency);
+            return Ok(Mapper.Map<ICollection<ProductRM>>(db.Products));          
         }
 
         // GET: api/Products/5
         public IHttpActionResult Get(int id)
         {
             var product=db.Products.Find(id);
-            var productVM = _mapper.Map<ProductVM>(product);
-            if (productVM == null)
+            
+            if (product == null)
             {
                 return NotFound();
             }
             else
             {
+                var productVM = Mapper.Map<ProductRM>(product);
                 return Ok(productVM); 
             }            
         }
 
         // POST: api/Products
-        public void Post([FromBody]Product product)
-        {           
-            db.Products.Add(product);
-            db.SaveChanges();
+        public IHttpActionResult Post([FromBody]Product product)
+        {
+            if (product == null)
+                return BadRequest();
+            else
+            {
+                db.Products.Add(product);
+                if (product.Id <= 0) return BadRequest("Введеный Id меньше или равен 0!");                
+                db.SaveChanges();
+                return Ok(Mapper.Map<ProductRM>(product));
+            }                        
         }
 
         // PUT: api/Products/5
-        public HttpResponseMessage Put(int id, [FromBody]Product product)
+        public IHttpActionResult Put(int id, [FromBody]Product product)
         {
             if (id == product.Id)
             {
                 db.Entry(product).State = EntityState.Modified;
+                if (product.Id <= 0) return BadRequest("Введеный Id меньше или равен 0!");
                 db.SaveChanges();
-                return new HttpResponseMessage(HttpStatusCode.OK);
+                return Ok(Mapper.Map<ProductRM>(product));
             }
-            return new HttpResponseMessage(HttpStatusCode.NotFound);
+            return NotFound();
         }
 
         // DELETE: api/Products/5
-        public HttpResponseMessage Delete(int id)
+        public IHttpActionResult Delete(int id)
         {
             Product product = db.Products.Find(id);
             if (product != null)
             {
                 db.Products.Remove(product);
                 db.SaveChanges();
-                return new HttpResponseMessage(HttpStatusCode.OK);
+                return Ok(Mapper.Map<ProductRM>(product));
             }
-            return new HttpResponseMessage(HttpStatusCode.NotFound);
+            return NotFound();
         }
     }
 

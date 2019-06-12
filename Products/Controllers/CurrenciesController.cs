@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Products.Models;
 using System;
 using System.Collections.Generic;
@@ -12,53 +13,67 @@ namespace Products.Controllers
     public class CurrenciesController : ApiController
     {
         ProductsContext db = new ProductsContext();
-        // GET: api/Currency
-        public IEnumerable<Currency> Get() 
+
+        // GET: api/Currencies
+        public IHttpActionResult Get()
         {
-            return db.Currencies;
+            return Ok(Mapper.Map<ICollection<CurrencyRM>>(db.Currencies));
         }
 
-        // GET: api/Currency/5
+        // GET: api/Currencies/5
         public IHttpActionResult Get(int id)
         {
-            Currency currency = db.Currencies.Find(id);
-            if (currency==null)
+            var currency = db.Currencies.Find(id);
+
+            if (currency == null)
             {
                 return NotFound();
             }
-            return Ok(currency);
+            else
+            {
+                var currencyVM = Mapper.Map<CurrencyRM>(currency);
+                return Ok(currencyVM);
+            }
         }
 
-        // POST: api/Currency
-        public void Post([FromBody]Currency currency)
-        {            
-            db.Currencies.Add(currency);
-            db.SaveChanges();
+        // POST: api/Currencies
+        public IHttpActionResult Post([FromBody]Currency currency)
+        {
+            if (currency == null)
+                return BadRequest();
+            else
+            {                
+                db.Currencies.Add(currency);
+                if (currency.Id <= 0) return BadRequest("Введеный Id меньше или равен 0!");
+                db.SaveChanges();
+                return Ok(Mapper.Map<CurrencyRM>(currency));
+            }
         }
 
-        // PUT: api/Currency/5
-        public HttpResponseMessage Put(int id, [FromBody]Currency currency)
+        // PUT: api/Currencies/5
+        public IHttpActionResult Put(int id, [FromBody]Currency currency)
         {
             if (id == currency.Id)
-            {
+            {                
                 db.Entry(currency).State = EntityState.Modified;
+                if (currency.Id <= 0) return BadRequest("Введеный Id меньше или равен 0!");
                 db.SaveChanges();
-                return new HttpResponseMessage(HttpStatusCode.OK);
+                return Ok(Mapper.Map<CurrencyRM>(currency));
             }
-            return new HttpResponseMessage(HttpStatusCode.NotFound);
+            return NotFound();
         }
 
-        // DELETE: api/Currency/5
-        public HttpResponseMessage Delete(int id)
+        // DELETE: api/Currencies/5
+        public IHttpActionResult Delete(int id)
         {
             Currency currency = db.Currencies.Find(id);
             if (currency != null)
             {
                 db.Currencies.Remove(currency);
                 db.SaveChanges();
-                return new HttpResponseMessage(HttpStatusCode.OK);
+                return Ok(Mapper.Map<CurrencyRM>(currency));
             }
-            return new HttpResponseMessage(HttpStatusCode.NotFound);
+            return NotFound();
         }
     }
 }

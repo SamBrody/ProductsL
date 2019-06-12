@@ -11,9 +11,13 @@ namespace Products
     {
         public MappingProfile()
         {
-            CreateMap<Product, ProductVM>();
-            CreateMap<Producer, ProducerVM>();
-            CreateMap<Currency, CurrencyVM>();
+            CreateMap<Product, ProductRM>();
+            CreateMap<Producer, ProducerRM>();
+            CreateMap<Currency, CurrencyRM>();
+            CreateMap<Producer, ProductRM>()
+                .ForMember(x => x.Producer_Name, x => x.MapFrom(m => m.Name));
+            CreateMap<Currency, ProductRM>()
+                .ForMember(x => x.Currency_Name, x => x.MapFrom(m => m.Name));
         }
     }
 }
