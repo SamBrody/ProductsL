@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Products.Models;
+using Products.Models.PostRM;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,17 +38,10 @@ namespace Products.Controllers
         }
 
         // POST: api/Currencies
-        public IHttpActionResult Post([FromBody]Currency currency)
+        public IHttpActionResult Post([FromBody]CurrencyPostRM currency)
         {
-            if (currency == null)
-                return BadRequest();
-            else
-            {                
-                db.Currencies.Add(currency);
-                if (currency.Id <= 0) return BadRequest("Введеный Id меньше или равен 0!");
-                db.SaveChanges();
-                return Ok(Mapper.Map<CurrencyRM>(currency));
-            }
+            var currencyVM = Mapper.Map<Currency>(currency);
+            return Ok(Mapper.Map<CurrencyRM>(currencyVM));
         }
 
         // PUT: api/Currencies/5

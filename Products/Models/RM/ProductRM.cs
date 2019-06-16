@@ -12,7 +12,7 @@ namespace Products.Models
         public string Description { get; set; }
         public int Price { get; set; }
         public bool Available { get; set; }
-        public string Producer_Name { get; set; }
-        public string Currency_Name { get; set; }
+        public string ManufacturerName { get; set; }
+        public string CurrencyName { get; set; }
     }
 }

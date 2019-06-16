@@ -39,7 +39,7 @@ namespace Products.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Products.Models.Producer", b =>
+            modelBuilder.Entity("Products.Models.Manufacturer", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -50,7 +50,7 @@ namespace Products.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Producers");
+                    b.ToTable("Manufacturers");
 
                     b.HasData(
                         new
@@ -80,21 +80,21 @@ namespace Products.Migrations
 
                     b.Property<bool>("Available");
 
-                    b.Property<int>("CurrId");
+                    b.Property<int>("CurrencyID");
 
                     b.Property<string>("Description");
+
+                    b.Property<int>("ManufacturerID");
 
                     b.Property<string>("Name");
 
                     b.Property<int>("Price");
 
-                    b.Property<int>("ProdId");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("CurrId");
+                    b.HasIndex("CurrencyID");
 
-                    b.HasIndex("ProdId");
+                    b.HasIndex("ManufacturerID");
 
                     b.ToTable("Products");
 
@@ -103,31 +103,31 @@ namespace Products.Migrations
                         {
                             Id = 1,
                             Available = true,
-                            CurrId = 2,
+                            CurrencyID = 2,
                             Description = "fast&furios",
+                            ManufacturerID = 1,
                             Name = "A1",
-                            Price = 100,
-                            ProdId = 1
+                            Price = 100
                         },
                         new
                         {
                             Id = 2,
                             Available = false,
-                            CurrId = 2,
+                            CurrencyID = 2,
                             Description = "soft",
+                            ManufacturerID = 3,
                             Name = "B1",
-                            Price = 150,
-                            ProdId = 3
+                            Price = 150
                         },
                         new
                         {
                             Id = 3,
                             Available = true,
-                            CurrId = 1,
+                            CurrencyID = 1,
                             Description = "-",
+                            ManufacturerID = 2,
                             Name = "C1",
-                            Price = 6000,
-                            ProdId = 2
+                            Price = 6000
                         });
                 });
 
@@ -135,12 +135,12 @@ namespace Products.Migrations
                 {
                     b.HasOne("Products.Models.Currency", "Currency")
                         .WithMany("Product")
-                        .HasForeignKey("CurrId")
+                        .HasForeignKey("CurrencyID")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Products.Models.Producer", "Producer")
+                    b.HasOne("Products.Models.Manufacturer", "Manufacturer")
                         .WithMany("Product")
-                        .HasForeignKey("ProdId")
+                        .HasForeignKey("ManufacturerID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

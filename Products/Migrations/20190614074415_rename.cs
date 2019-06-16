@@ -2,7 +2,7 @@
 
 namespace Products.Migrations
 {
-    public partial class fk : Migration
+    public partial class rename : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -20,7 +20,7 @@ namespace Products.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Producers",
+                name: "Manufacturers",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -30,7 +30,7 @@ namespace Products.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Producers", x => x.Id);
+                    table.PrimaryKey("PK_Manufacturers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -43,22 +43,22 @@ namespace Products.Migrations
                     Description = table.Column<string>(nullable: true),
                     Price = table.Column<int>(nullable: false),
                     Available = table.Column<bool>(nullable: false),
-                    ProdId = table.Column<int>(nullable: false),
-                    CurrId = table.Column<int>(nullable: false)
+                    ManufacturerID = table.Column<int>(nullable: false),
+                    CurrencyID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Products", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Products_Currencies_CurrId",
-                        column: x => x.CurrId,
+                        name: "FK_Products_Currencies_CurrencyID",
+                        column: x => x.CurrencyID,
                         principalTable: "Currencies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Products_Producers_ProdId",
-                        column: x => x.ProdId,
-                        principalTable: "Producers",
+                        name: "FK_Products_Manufacturers_ManufacturerID",
+                        column: x => x.ManufacturerID,
+                        principalTable: "Manufacturers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -74,44 +74,44 @@ namespace Products.Migrations
                 values: new object[] { 2, "$" });
 
             migrationBuilder.InsertData(
-                table: "Producers",
+                table: "Manufacturers",
                 columns: new[] { "Id", "CityL", "Name" },
                 values: new object[] { 1, "Herzogenaurach", "Adidas" });
 
             migrationBuilder.InsertData(
-                table: "Producers",
+                table: "Manufacturers",
                 columns: new[] { "Id", "CityL", "Name" },
                 values: new object[] { 2, "Beaverton", "Nike" });
 
             migrationBuilder.InsertData(
-                table: "Producers",
+                table: "Manufacturers",
                 columns: new[] { "Id", "CityL", "Name" },
                 values: new object[] { 3, "Herzogenaurach", "Puma" });
 
             migrationBuilder.InsertData(
                 table: "Products",
-                columns: new[] { "Id", "Available", "CurrId", "Description", "Name", "Price", "ProdId" },
-                values: new object[] { 1, true, 2, "fast&furios", "A1", 100, 1 });
+                columns: new[] { "Id", "Available", "CurrencyID", "Description", "ManufacturerID", "Name", "Price" },
+                values: new object[] { 1, true, 2, "fast&furios", 1, "A1", 100 });
 
             migrationBuilder.InsertData(
                 table: "Products",
-                columns: new[] { "Id", "Available", "CurrId", "Description", "Name", "Price", "ProdId" },
-                values: new object[] { 3, true, 1, "-", "C1", 6000, 2 });
+                columns: new[] { "Id", "Available", "CurrencyID", "Description", "ManufacturerID", "Name", "Price" },
+                values: new object[] { 3, true, 1, "-", 2, "C1", 6000 });
 
             migrationBuilder.InsertData(
                 table: "Products",
-                columns: new[] { "Id", "Available", "CurrId", "Description", "Name", "Price", "ProdId" },
-                values: new object[] { 2, false, 2, "soft", "B1", 150, 3 });
+                columns: new[] { "Id", "Available", "CurrencyID", "Description", "ManufacturerID", "Name", "Price" },
+                values: new object[] { 2, false, 2, "soft", 3, "B1", 150 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Products_CurrId",
+                name: "IX_Products_CurrencyID",
                 table: "Products",
-                column: "CurrId");
+                column: "CurrencyID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Products_ProdId",
+                name: "IX_Products_ManufacturerID",
                 table: "Products",
-                column: "ProdId");
+                column: "ManufacturerID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -123,7 +123,7 @@ namespace Products.Migrations
                 name: "Currencies");
 
             migrationBuilder.DropTable(
-                name: "Producers");
+                name: "Manufacturers");
         }
     }
 }

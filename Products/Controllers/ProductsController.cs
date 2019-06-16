@@ -9,6 +9,7 @@ using System.Web.Http;
 using AutoMapper;
 using System.Web.Mvc;
 using Products;
+using Products.Models.PostRM;
 
 namespace Products.Controllers
 {
@@ -39,17 +40,10 @@ namespace Products.Controllers
         }
 
         // POST: api/Products
-        public IHttpActionResult Post([FromBody]Product product)
+        public IHttpActionResult Post([FromBody]ProductPostRM product)
         {
-            if (product == null)
-                return BadRequest();
-            else
-            {
-                db.Products.Add(product);
-                if (product.Id <= 0) return BadRequest("Введеный Id меньше или равен 0!");                
-                db.SaveChanges();
-                return Ok(Mapper.Map<ProductRM>(product));
-            }                        
+            var productVM = Mapper.Map<Product>(product);
+            return Ok(Mapper.Map<ProductRM>(productVM));                      
         }
 
         // PUT: api/Products/5
@@ -58,7 +52,6 @@ namespace Products.Controllers
             if (id == product.Id)
             {
                 db.Entry(product).State = EntityState.Modified;
-                if (product.Id <= 0) return BadRequest("Введеный Id меньше или равен 0!");
                 db.SaveChanges();
                 return Ok(Mapper.Map<ProductRM>(product));
             }

@@ -15,9 +15,9 @@ namespace Products.Models
         public int Price { get; set; }
         public bool Available { get; set; }
 
-        public int ProdId { get; set; }
-        public int CurrId { get; set; }
-        public virtual Producer Producer { get; set; }
+        public int ManufacturerID { get; set; }
+        public int CurrencyID { get; set; }
+        public virtual Manufacturer Manufacturer { get; set; }
         public virtual Currency Currency { get; set; }
     }
 }
