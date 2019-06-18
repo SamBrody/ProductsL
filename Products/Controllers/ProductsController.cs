@@ -42,20 +42,23 @@ namespace Products.Controllers
         // POST: api/Products
         public IHttpActionResult Post([FromBody]ProductPostRM product)
         {
-            var productVM = Mapper.Map<Product>(product);
-            return Ok(Mapper.Map<ProductRM>(productVM));                      
+            var entity = Mapper.Map<Product>(product);
+            db.Add(entity);
+            db.SaveChanges();
+            return Ok(Mapper.Map<ProductRM>(entity));                      
         }
 
         // PUT: api/Products/5
-        public IHttpActionResult Put(int id, [FromBody]Product product)
+        public IHttpActionResult Put(int id, [FromBody]ProductPostRM product)
         {
-            if (id == product.Id)
+            if (id <= 0 || product == null) return BadRequest("Bad transaction");
             {
-                db.Entry(product).State = EntityState.Modified;
+                var entity = Mapper.Map<Product>(product);
+                entity.Id = id;
+                db.Entry(entity).State = EntityState.Modified;
                 db.SaveChanges();
-                return Ok(Mapper.Map<ProductRM>(product));
+                return Ok(Mapper.Map<ProductRM>(entity));
             }
-            return NotFound();
         }
 
         // DELETE: api/Products/5

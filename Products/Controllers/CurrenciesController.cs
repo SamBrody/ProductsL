@@ -40,21 +40,23 @@ namespace Products.Controllers
         // POST: api/Currencies
         public IHttpActionResult Post([FromBody]CurrencyPostRM currency)
         {
-            var currencyVM = Mapper.Map<Currency>(currency);
-            return Ok(Mapper.Map<CurrencyRM>(currencyVM));
+            var entity = Mapper.Map<Currency>(currency);
+            db.Add(entity);
+            db.SaveChanges();
+            return Ok(Mapper.Map<CurrencyRM>(entity));
         }
 
         // PUT: api/Currencies/5
-        public IHttpActionResult Put(int id, [FromBody]Currency currency)
+        public IHttpActionResult Put(int id, [FromBody]CurrencyPostRM currency)
         {
-            if (id == currency.Id)
-            {                
-                db.Entry(currency).State = EntityState.Modified;
-                if (currency.Id <= 0) return BadRequest("Введеный Id меньше или равен 0!");
+            if (id <= 0 || currency == null) return BadRequest("Bad transaction");          
+            {          
+                var entity = Mapper.Map<Currency>(currency);
+                entity.Id = id;
+                db.Entry(entity).State = EntityState.Modified;
                 db.SaveChanges();
-                return Ok(Mapper.Map<CurrencyRM>(currency));
-            }
-            return NotFound();
+                return Ok(Mapper.Map<CurrencyRM>(entity));
+            }            
         }
 
         // DELETE: api/Currencies/5

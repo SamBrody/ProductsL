@@ -41,21 +41,23 @@ namespace Products.Controllers
         // POST: api/Manufacturers
         public IHttpActionResult Post([FromBody]ManufacturerPostRM manufacturer)
         {
-            var manufacturerVM = Mapper.Map<Manufacturer>(manufacturer);
-            return Ok(Mapper.Map<ManufacturerRM>(manufacturerVM));
+            var entity = Mapper.Map<Manufacturer>(manufacturer);
+            db.Add(entity);
+            db.SaveChanges();
+            return Ok(Mapper.Map<ManufacturerRM>(entity));
         }
 
         // PUT: api/Manufacturers/5
-        public IHttpActionResult Put(int id, [FromBody]Manufacturer manufacturer)
+        public IHttpActionResult Put(int id, [FromBody]ManufacturerPostRM manufacturer)
         {
-            if (id == manufacturer.Id)
-            {                
-                db.Entry(manufacturer).State = EntityState.Modified;
-                if (manufacturer.Id <= 0) return BadRequest("Введеный Id меньше или равен 0!");
+            if (id <= 0 || manufacturer == null) return BadRequest("Bad transaction");
+            {
+                var entity = Mapper.Map<Manufacturer>(manufacturer);
+                entity.Id = id;
+                db.Entry(entity).State = EntityState.Modified;
                 db.SaveChanges();
-                return Ok(Mapper.Map<ManufacturerRM>(manufacturer));
+                return Ok(Mapper.Map<ManufacturerRM>(entity));
             }
-            return NotFound();
         }
 
         // DELETE: api/Manufacturers/5
